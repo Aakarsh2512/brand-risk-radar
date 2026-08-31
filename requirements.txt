@@ -9,3 +9,4 @@ bertopic
 ruptures
 scipy
 pytest
+transformers

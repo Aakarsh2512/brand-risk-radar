@@ -45,6 +45,9 @@ MIGRATIONS = [
     "ALTER TABLE mentions ADD COLUMN dedup_group_id TEXT",
     "ALTER TABLE mentions ADD COLUMN is_canonical INTEGER DEFAULT 1",
     "ALTER TABLE mentions ADD COLUMN topic_id INTEGER",
+    "ALTER TABLE mentions ADD COLUMN sentiment_label TEXT",
+    "ALTER TABLE mentions ADD COLUMN sentiment_score REAL",
+    "ALTER TABLE daily_stats ADD COLUMN mean_sentiment REAL",
 ]
 
 
