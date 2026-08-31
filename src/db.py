@@ -27,6 +27,16 @@ CREATE TABLE IF NOT EXISTS topics (
     size INTEGER,         -- number of mentions currently in this topic
     PRIMARY KEY (brand, topic_id)
 );
+
+CREATE TABLE IF NOT EXISTS daily_stats (
+    brand TEXT NOT NULL,
+    date TEXT NOT NULL,             -- YYYY-MM-DD (UTC)
+    mention_count INTEGER,
+    dominant_topic INTEGER,
+    drift_score REAL,               -- Jensen-Shannon distance vs previous day's topic mix (0-1)
+    is_changepoint INTEGER DEFAULT 0,
+    PRIMARY KEY (brand, date)
+);
 """
 
 # Lightweight migrations: each is safe to re-run, failures (column already

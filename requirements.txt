@@ -6,3 +6,6 @@ sqlite-utils
 sentence-transformers
 pyyaml>=6.0.1
 bertopic
+ruptures
+scipy
+pytest
