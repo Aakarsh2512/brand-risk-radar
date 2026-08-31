@@ -38,3 +38,25 @@ venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env  # fill in your API keys
 ```
+
+Run the pipeline in order (each step reads what the previous one wrote to SQLite):
+
+```bash
+python -m src.ingest.run
+python -m src.dedup.run
+python -m src.topics.run
+python -m src.drift.run
+python -m src.sentiment.run
+python -m src.risk.run
+python -m src.alert.run
+```
+
+Then run the API and dashboard (separate terminals):
+
+```bash
+uvicorn src.api.main:app --reload --port 8000
+
+cd frontend
+npm install
+npm run dev   # http://localhost:5173
+```
