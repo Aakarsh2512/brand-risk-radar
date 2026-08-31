@@ -13,4 +13,4 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 DB_PATH = os.getenv("DB_PATH", "data/mentions.db")
 
 # Brands to track. Edit this list for whichever brand(s) you're backtesting/monitoring.
-TRACKED_BRANDS = ["your brand here"]
+TRACKED_BRANDS = ["Boeing"]
