@@ -1,5 +1,9 @@
 # Brand Risk Radar
 
+**Live demo:** [brand-risk-radar.vercel.app](https://brand-risk-radar.vercel.app/)
+(backend: [brand-risk-radar-api.onrender.com](https://brand-risk-radar-api.onrender.com/api/brands) —
+free-tier, may take ~30-60s to wake up on first load)
+
 An early-warning system for PR crises. Instead of only tracking whether sentiment
 about a brand is positive or negative, this project tracks **what the story is
 about** and detects when that narrative shifts — e.g. from "product defect" to
