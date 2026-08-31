@@ -1,0 +1,6 @@
+requests
+praw
+python-dotenv
+pandas
+sqlite-utils
+sentence-transformers
