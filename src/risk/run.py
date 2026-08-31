@@ -35,8 +35,17 @@ def run() -> None:
                 baseline_sentiments=baseline_sentiments,
             )
             conn.execute(
-                "UPDATE daily_stats SET risk_score = ?, risk_band = ? WHERE brand = ? AND date = ?",
-                (result["score"], result["band"], brand, date),
+                """
+                UPDATE daily_stats
+                SET risk_score = ?, risk_band = ?,
+                    drift_component = ?, volume_component = ?, sentiment_component = ?
+                WHERE brand = ? AND date = ?
+                """,
+                (
+                    result["score"], result["band"],
+                    result["drift_component"], result["volume_component"], result["sentiment_component"],
+                    brand, date,
+                ),
             )
         conn.commit()
 

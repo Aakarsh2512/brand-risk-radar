@@ -10,3 +10,4 @@ ruptures
 scipy
 pytest
 transformers
+anthropic

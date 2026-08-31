@@ -50,6 +50,10 @@ MIGRATIONS = [
     "ALTER TABLE daily_stats ADD COLUMN mean_sentiment REAL",
     "ALTER TABLE daily_stats ADD COLUMN risk_score REAL",
     "ALTER TABLE daily_stats ADD COLUMN risk_band TEXT",
+    "ALTER TABLE daily_stats ADD COLUMN drift_component REAL",
+    "ALTER TABLE daily_stats ADD COLUMN volume_component REAL",
+    "ALTER TABLE daily_stats ADD COLUMN sentiment_component REAL",
+    "ALTER TABLE daily_stats ADD COLUMN alerted INTEGER DEFAULT 0",
 ]
 
 
