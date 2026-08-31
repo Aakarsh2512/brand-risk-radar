@@ -15,9 +15,9 @@ def _to_date(published_at: str) -> str:
     return datetime.fromisoformat(published_at.replace("Z", "+00:00")).date().isoformat()
 
 
-def run() -> None:
+def run(brands: list[str] | None = None) -> None:
     conn = get_connection()
-    for brand in TRACKED_BRANDS:
+    for brand in (brands or TRACKED_BRANDS):
         rows = conn.execute(
             """
             SELECT published_at, topic_id FROM mentions

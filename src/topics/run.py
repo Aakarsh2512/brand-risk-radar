@@ -9,9 +9,9 @@ from src.topics.model import fit_topic_model
 MIN_TOPIC_SIZE = 3
 
 
-def run(min_topic_size: int = MIN_TOPIC_SIZE) -> None:
+def run(min_topic_size: int = MIN_TOPIC_SIZE, brands: list[str] | None = None) -> None:
     conn = get_connection()
-    for brand in TRACKED_BRANDS:
+    for brand in (brands or TRACKED_BRANDS):
         rows = conn.execute(
             "SELECT id, title, text FROM mentions WHERE brand = ? AND is_canonical = 1",
             (brand,),

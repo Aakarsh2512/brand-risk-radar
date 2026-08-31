@@ -12,9 +12,9 @@ from src.dedup.embed import embed_texts
 SIMILARITY_THRESHOLD = 0.82
 
 
-def run(threshold: float = SIMILARITY_THRESHOLD) -> None:
+def run(threshold: float = SIMILARITY_THRESHOLD, brands: list[str] | None = None) -> None:
     conn = get_connection()
-    for brand in TRACKED_BRANDS:
+    for brand in (brands or TRACKED_BRANDS):
         rows = conn.execute(
             "SELECT id, title, text, published_at FROM mentions WHERE brand = ? ORDER BY published_at",
             (brand,),

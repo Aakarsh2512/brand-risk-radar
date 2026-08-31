@@ -7,9 +7,9 @@ from src.db import get_connection
 from src.risk.score import BASELINE_WINDOW, score_day
 
 
-def run() -> None:
+def run(brands: list[str] | None = None) -> None:
     conn = get_connection()
-    for brand in TRACKED_BRANDS:
+    for brand in (brands or TRACKED_BRANDS):
         rows = conn.execute(
             """
             SELECT date, mention_count, drift_score, is_changepoint, mean_sentiment
