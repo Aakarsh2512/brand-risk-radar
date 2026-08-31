@@ -48,6 +48,8 @@ MIGRATIONS = [
     "ALTER TABLE mentions ADD COLUMN sentiment_label TEXT",
     "ALTER TABLE mentions ADD COLUMN sentiment_score REAL",
     "ALTER TABLE daily_stats ADD COLUMN mean_sentiment REAL",
+    "ALTER TABLE daily_stats ADD COLUMN risk_score REAL",
+    "ALTER TABLE daily_stats ADD COLUMN risk_band TEXT",
 ]
 
 
