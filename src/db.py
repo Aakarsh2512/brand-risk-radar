@@ -21,11 +21,24 @@ CREATE INDEX IF NOT EXISTS idx_mentions_brand_date
     ON mentions (brand, published_at);
 """
 
+# Lightweight migrations: each is safe to re-run, failures (column already
+# exists) are ignored. Simpler than a migration framework for a project this size.
+MIGRATIONS = [
+    "ALTER TABLE mentions ADD COLUMN dedup_group_id TEXT",
+    "ALTER TABLE mentions ADD COLUMN is_canonical INTEGER DEFAULT 1",
+]
+
 
 def get_connection() -> sqlite3.Connection:
     Path(DB_PATH).parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.executescript(SCHEMA)
+    for stmt in MIGRATIONS:
+        try:
+            conn.execute(stmt)
+        except sqlite3.OperationalError:
+            pass  # column already exists
+    conn.commit()
     return conn
 
 

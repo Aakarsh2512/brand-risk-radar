@@ -15,12 +15,20 @@ often a stronger, earlier signal of an escalating crisis than sentiment alone.
 5. **Sentiment** — transformer classifier, used as a supporting signal
 6. **Composite risk score** — volume anomaly + topic drift + sentiment, banded Watch/Elevated/Critical
 7. **Alerting** — Slack webhook with an auto-generated explanation of the score
-8. **Dashboard** — Streamlit view of risk trajectory, topics over time, flagged mentions
+8. **API + Dashboard** — FastAPI backend serving risk scores/topics/mentions as JSON,
+   consumed by a React (Vite) + Recharts frontend
 9. **Evaluation** — backtest against a real, documented brand crisis; precision/recall of alert timing
 
 ## Status
 
 🚧 Work in progress, built incrementally module by module.
+
+## Project layout
+
+```
+src/           Python pipeline: ingestion, dedup, topic modeling, scoring, API
+frontend/      React dashboard (added once the API has real data to serve)
+```
 
 ## Setup
 
