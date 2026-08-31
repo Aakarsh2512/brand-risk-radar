@@ -19,6 +19,14 @@ CREATE TABLE IF NOT EXISTS mentions (
 
 CREATE INDEX IF NOT EXISTS idx_mentions_brand_date
     ON mentions (brand, published_at);
+
+CREATE TABLE IF NOT EXISTS topics (
+    brand TEXT NOT NULL,
+    topic_id INTEGER NOT NULL,
+    keywords TEXT,       -- top keywords for this topic, comma-separated
+    size INTEGER,         -- number of mentions currently in this topic
+    PRIMARY KEY (brand, topic_id)
+);
 """
 
 # Lightweight migrations: each is safe to re-run, failures (column already
@@ -26,6 +34,7 @@ CREATE INDEX IF NOT EXISTS idx_mentions_brand_date
 MIGRATIONS = [
     "ALTER TABLE mentions ADD COLUMN dedup_group_id TEXT",
     "ALTER TABLE mentions ADD COLUMN is_canonical INTEGER DEFAULT 1",
+    "ALTER TABLE mentions ADD COLUMN topic_id INTEGER",
 ]
 
 

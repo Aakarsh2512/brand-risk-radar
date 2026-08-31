@@ -4,3 +4,5 @@ python-dotenv
 pandas
 sqlite-utils
 sentence-transformers
+pyyaml>=6.0.1
+bertopic
