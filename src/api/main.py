@@ -5,6 +5,8 @@ src/risk); this just exposes the results.
 
 Run with: uvicorn src.api.main:app --reload
 """
+import os
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,9 +15,14 @@ from src.db import get_connection
 
 app = FastAPI(title="Brand Risk Radar API")
 
+allowed_origins = ["http://localhost:5173"]
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    allowed_origins.append(frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=allowed_origins,
     allow_methods=["GET"],
     allow_headers=["*"],
 )

@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .env
 *.db
+!data/mentions.db
 .streamlit/secrets.toml
 .ipynb_checkpoints/
 logs/
