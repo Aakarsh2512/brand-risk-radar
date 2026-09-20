@@ -36,9 +36,9 @@ brand's own history (`python -m src.evaluate.compare`):
 
 | detector  | days fired | rate |
 |-----------|-----------:|-----:|
-| drift     | 8          | 3.1% |
+| drift     | 7          | 2.7% |
 | volume    | 13         | 5.0% |
-| sentiment | 8          | 3.1% |
+| sentiment | 9          | 3.4% |
 
 **Drift and sentiment overlapped on zero days.** They are orthogonal — each
 catches events the other completely misses, which is the clearest support for
@@ -46,13 +46,12 @@ the premise that sentiment monitoring alone leaves a real gap.
 
 Events drift caught that sentiment did not:
 
-- **Shein, 8–10 Sep** — a children's toy recalled over a choking risk (the
+- **Shein, 9–10 Sep** — a children's toy recalled over a choking risk (the
   fourth recall since Aug 2025) alongside a $5bn drop in value after IPO.
-  Drift fired at **+7.6σ**; sentiment over the same window read **+0.4σ**,
-  i.e. nothing. One flag landed **2 days before** the recall coverage peaked.
-- **Ryanair, 16 Sep** — backlash over the CEO's use of the word "rapists",
-  plus a refund refused to a bereaved mother. Drift **+7.8σ**, sentiment
-  **−1.4σ** (moving the *wrong* way).
+  Drift fired at **+3.5σ**; sentiment over the same window read **+0.4σ**,
+  i.e. nothing.
+- **Tesla, 9 Sep** — a passenger killed and driver critically injured when a
+  Tesla crashed into scaffolding. Drift **+2.5σ**, sentiment **−0.4σ**.
 - **TikTok, 16 Sep** — users stalking a holdout juror's family. Drift **+3.1σ**,
   sentiment **−0.8σ**.
 
@@ -81,10 +80,21 @@ Worth recording, because the fixes are most of the engineering:
   +8σ. Windows below 10 mentions no longer score.
 - **The drift step wiped columns other steps owned** (`alerted`,
   `mean_sentiment`) by rebuilding `daily_stats` each run, silently zeroing the
-  sentiment term. They're now carried across the rebuild.
+  sentiment term in the risk score. They're now carried across the rebuild.
 - **Backfill silently truncated high-volume brands** — a 7-day window that hits
   NewsAPI's 100-result cap returns only the newest slice, collapsing a week
   into a day. Windows now split when `totalResults` exceeds the cap.
+- **Results weren't reproducible.** UMAP seeds randomly, so refitting on
+  identical data produced different topics — and since drift is measured over
+  the topic distribution, *every historical day's score changed with it*. Two
+  runs disagreed on whether a day was a +7.6σ spike or a +2.9σ one. The daily
+  job recomputes history from scratch, so yesterday's published numbers
+  silently stopped matching today's. `random_state` is now pinned and a test
+  guards it.
+- **One rate-limited brand killed the whole run.** NewsAPI allows 100
+  requests/24h; once spent, the 429 propagated out of ingestion and skipped
+  every remaining brand *and* all downstream stages, so a whole day produced
+  nothing.
 
 ## Status
 

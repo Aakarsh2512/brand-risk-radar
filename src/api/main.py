@@ -37,8 +37,9 @@ def list_brands():
 def daily_stats(brand: str):
     conn = get_connection()
     columns = [
-        "date", "mention_count", "drift_score", "is_changepoint", "mean_sentiment",
-        "risk_score", "risk_band", "drift_component", "volume_component", "sentiment_component",
+        "date", "mention_count", "window_mentions", "drift_score", "drift_z",
+        "is_changepoint", "mean_sentiment", "risk_score", "risk_band",
+        "drift_component", "volume_component", "sentiment_component",
     ]
     rows = conn.execute(
         f"SELECT {', '.join(columns)} FROM daily_stats WHERE brand = ? ORDER BY date",
