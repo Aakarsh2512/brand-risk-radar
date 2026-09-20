@@ -54,6 +54,8 @@ MIGRATIONS = [
     "ALTER TABLE daily_stats ADD COLUMN volume_component REAL",
     "ALTER TABLE daily_stats ADD COLUMN sentiment_component REAL",
     "ALTER TABLE daily_stats ADD COLUMN alerted INTEGER DEFAULT 0",
+    "ALTER TABLE daily_stats ADD COLUMN drift_z REAL",
+    "ALTER TABLE daily_stats ADD COLUMN window_mentions INTEGER",
 ]
 
 

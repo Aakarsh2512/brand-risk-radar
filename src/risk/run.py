@@ -12,7 +12,7 @@ def run(brands: list[str] | None = None) -> None:
     for brand in (brands or TRACKED_BRANDS):
         rows = conn.execute(
             """
-            SELECT date, mention_count, drift_score, is_changepoint, mean_sentiment
+            SELECT date, mention_count, drift_z, is_changepoint, mean_sentiment
             FROM daily_stats WHERE brand = ? ORDER BY date
             """,
             (brand,),
@@ -21,13 +21,13 @@ def run(brands: list[str] | None = None) -> None:
             print(f"[{brand}] no daily_stats yet, skipping")
             continue
 
-        for i, (date, count, drift, is_cp, sentiment) in enumerate(rows):
+        for i, (date, count, drift_z, is_cp, sentiment) in enumerate(rows):
             window = rows[max(0, i - BASELINE_WINDOW):i]
             baseline_counts = [r[1] for r in window if r[1] is not None]
             baseline_sentiments = [r[4] for r in window if r[4] is not None]
 
             result = score_day(
-                drift_score=drift or 0.0,
+                drift_z=drift_z or 0.0,
                 is_changepoint=bool(is_cp),
                 today_count=count or 0,
                 baseline_counts=baseline_counts,

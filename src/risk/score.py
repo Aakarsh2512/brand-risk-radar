@@ -59,15 +59,26 @@ def _band(score: float) -> str:
     return "Watch"
 
 
+def _drift_component(drift_z: float) -> float:
+    """0-100 from a normalized drift z-score, on the same scale as the volume
+    component so the weights mean what they look like.
+
+    The first version used the raw 0-1 JS distance times 100, which ignored
+    that every brand has its own resting level of churn. That made the drift
+    term sit at 50-80 on an ordinary day and dominate the score permanently.
+    """
+    return max(0.0, min(drift_z, 3.0)) / 3.0 * 100
+
+
 def score_day(
-    drift_score: float,
+    drift_z: float,
     is_changepoint: bool,
     today_count: int,
     baseline_counts: list[int],
     today_sentiment: float,
     baseline_sentiments: list[float],
 ) -> dict:
-    drift_component = drift_score * 100
+    drift_component = _drift_component(drift_z)
     volume_component = _volume_component(today_count, baseline_counts)
     sentiment_component = _sentiment_component(today_sentiment, baseline_sentiments)
 
