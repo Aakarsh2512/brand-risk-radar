@@ -11,6 +11,9 @@ export const getDailyStats = (brand) =>
 export const getTopics = (brand) =>
   client.get(`/topics/${encodeURIComponent(brand)}`).then((r) => r.data);
 
+export const getPreview = (brand) =>
+  client.get(`/preview/${encodeURIComponent(brand)}`).then((r) => r.data);
+
 export const getMentions = (brand, date) =>
   client
     .get(`/mentions/${encodeURIComponent(brand)}`, { params: { limit: 200, ...(date ? { date } : {}) } })

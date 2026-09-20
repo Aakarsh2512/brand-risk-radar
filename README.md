@@ -28,6 +28,14 @@ often a stronger, earlier signal of an escalating crisis than sentiment alone.
    independent detectors head-to-head; `src/evaluate/run.py` scores flags against
    labelled events
 
+The dashboard also takes a **search for any brand**, tracked or not, and returns a
+live preview: current headline coverage and volume per day. It deliberately stops
+short of a risk score — drift is measured against a brand's own baseline churn, so
+it needs roughly two weeks of history first, and the deployed API runs without the
+ML dependencies so it fits a free 512MB instance. To get a full analysis for a new
+brand, add it to `TRACKED_BRANDS` and let the daily job build up history (or run
+`python -m src.ingest.backfill` to pull a month at once).
+
 ## Findings
 
 Run over **3,835 relevant mentions across 10 brands** (~30 days), the three

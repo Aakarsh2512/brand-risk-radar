@@ -25,10 +25,100 @@
   max-width: 52ch;
 }
 
-.brand-picker {
+.header-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.brand-picker,
+.brand-search {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.brand-search label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.brand-search-row {
+  display: flex;
+  gap: 6px;
+}
+
+.brand-search input {
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font: inherit;
+  width: 150px;
+  box-shadow: var(--shadow);
+}
+
+.brand-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.brand-search input:focus-visible,
+.brand-search button:focus-visible {
+  outline: 2px solid var(--series);
+  outline-offset: 1px;
+}
+
+.brand-search button {
+  background: var(--text-primary);
+  color: var(--surface);
+  border: 1px solid var(--text-primary);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.brand-search button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.notice {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--series);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.notice p {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  max-width: 72ch;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--series);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.preview-stats {
+  grid-template-columns: repeat(2, minmax(0, 260px));
 }
 
 .brand-picker label {
@@ -377,8 +467,13 @@ tbody tr:last-child td {
     flex-direction: column;
   }
 
-  .stat-grid {
+  .stat-grid,
+  .preview-stats {
     grid-template-columns: 1fr;
+  }
+
+  .brand-search input {
+    width: 100%;
   }
 
   .source-cell {

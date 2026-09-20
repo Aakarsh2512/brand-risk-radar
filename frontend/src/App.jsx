@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
-import { getBrands, getDailyStats, getMentions, getTopics } from "./api";
+import { getBrands, getDailyStats, getMentions, getPreview, getTopics } from "./api";
+import BrandSearch from "./components/BrandSearch";
 import MentionsTable from "./components/MentionsTable";
+import PreviewPanel from "./components/PreviewPanel";
 import RiskTrajectoryChart from "./components/RiskTrajectoryChart";
 import StatTiles from "./components/StatTiles";
 import TopicList from "./components/TopicList";
@@ -20,6 +22,27 @@ export default function App() {
   const [selectedTopicId, setSelectedTopicId] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [preview, setPreview] = useState(null);
+  const [searching, setSearching] = useState(false);
+
+  // Searching a brand we already track should open the real analysis rather
+  // than a thinner live preview of it.
+  const handleSearch = (name) => {
+    const match = brands.find((b) => b.toLowerCase() === name.toLowerCase());
+    if (match) {
+      setPreview(null);
+      setBrand(match);
+      return;
+    }
+    setSearching(true);
+    setError(null);
+    getPreview(name)
+      .then(setPreview)
+      .catch((e) =>
+        setError(e?.response?.data?.detail ?? `Could not look up "${name}".`)
+      )
+      .finally(() => setSearching(false));
+  };
 
   useEffect(() => {
     getBrands()
@@ -75,26 +98,47 @@ export default function App() {
         </div>
 
         {brands.length > 0 && (
-          <div className="brand-picker">
-            <label htmlFor="brand">Brand</label>
-            <select id="brand" value={brand ?? ""} onChange={(e) => setBrand(e.target.value)}>
-              {brands.map((b) => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
+          <div className="header-controls">
+            <div className="brand-picker">
+              <label htmlFor="brand">Tracked brand</label>
+              <select
+                id="brand"
+                value={preview ? "" : brand ?? ""}
+                onChange={(e) => {
+                  setPreview(null);
+                  setBrand(e.target.value);
+                }}
+              >
+                {preview && <option value="">—</option>}
+                {brands.map((b) => (
+                  <option key={b} value={b}>
+                    {b}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <BrandSearch onSearch={handleSearch} busy={searching} />
           </div>
         )}
       </header>
 
       {error && <p className="error-banner">{error}</p>}
 
-      {loading && !dailyStats.length && !error && (
+      {preview && (
+        <PreviewPanel
+          preview={preview}
+          onTrackedClick={() => {
+            setPreview(null);
+            setBrand(preview.brand);
+          }}
+        />
+      )}
+
+      {!preview && loading && !dailyStats.length && !error && (
         <div className="card skeleton">Loading…</div>
       )}
 
-      {latest && (
+      {!preview && latest && (
         <>
           <StatTiles latest={latest} peak={peak} />
 
@@ -108,7 +152,7 @@ export default function App() {
         </>
       )}
 
-      {topics.length > 0 && (
+      {!preview && topics.length > 0 && (
         <section className="card section">
           <div className="card-head">
             <h2>Topics</h2>
@@ -122,7 +166,7 @@ export default function App() {
         </section>
       )}
 
-      {mentions.length > 0 && (
+      {!preview && mentions.length > 0 && (
         <section className="card section">
           <div className="card-head">
             <h2>
