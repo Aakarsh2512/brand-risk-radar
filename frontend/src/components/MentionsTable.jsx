@@ -1,16 +1,19 @@
-const SENTIMENT_COLOR = { positive: "#2f9e44", neutral: "#868e96", negative: "#c92a2a" };
+const SENTIMENT_ROLE = { positive: "good", neutral: "neutral", negative: "critical" };
+
+const fmtDate = (iso) =>
+  new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 
 export default function MentionsTable({ mentions }) {
-  if (!mentions.length) return <p className="empty-note">No mentions match this filter.</p>;
+  if (!mentions.length) return <p className="empty-note">No articles match this filter.</p>;
 
   return (
     <table className="mentions-table">
       <thead>
         <tr>
-          <th>Title</th>
+          <th>Headline</th>
           <th>Source</th>
-          <th>Sentiment</th>
-          <th>Published</th>
+          <th style={{ width: "7rem" }}>Sentiment</th>
+          <th className="num-cell">Published</th>
         </tr>
       </thead>
       <tbody>
@@ -21,11 +24,15 @@ export default function MentionsTable({ mentions }) {
                 {m.title}
               </a>
             </td>
-            <td>{m.source_name}</td>
-            <td style={{ color: SENTIMENT_COLOR[m.sentiment_label] ?? "#868e96" }}>
-              {m.sentiment_label}
+            <td className="source-cell">{m.source_name}</td>
+            <td>
+              {/* the word carries the meaning; the dot only reinforces it */}
+              <span className="sentiment">
+                <i className={`band-dot ${SENTIMENT_ROLE[m.sentiment_label] ?? "neutral"}`} />
+                {m.sentiment_label ?? "—"}
+              </span>
             </td>
-            <td>{new Date(m.published_at).toLocaleString()}</td>
+            <td className="num-cell date-cell">{fmtDate(m.published_at)}</td>
           </tr>
         ))}
       </tbody>
